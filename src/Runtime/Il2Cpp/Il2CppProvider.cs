@@ -99,27 +99,28 @@ namespace UniverseLib.Runtime.Il2Cpp
         /// <inheritdoc/>
         protected internal override GameObject[] Internal_GetRootGameObjects(Scene scene)
         {
-            if (!scene.isLoaded || scene.handle == -1)
+            if (!scene.isLoaded || scene.GetSceneIntHandle() == -1)
                 return new GameObject[0];
 
-            int count = GetRootCount(scene.handle);
+            int count = GetRootCount(scene.GetSceneIntHandle());
             if (count < 1)
                 return new GameObject[0];
 
             Il2CppSystem.Collections.Generic.List<GameObject> list = new(count);
             ICallManager.GetICall<d_GetRootGameObjects>("UnityEngine.SceneManagement.Scene::GetRootGameObjectsInternal")
-                .Invoke(scene.handle, list.Pointer);
+                .Invoke(scene.GetSceneIntHandle(), list.Pointer);
             return list.ToArray();
         }
 
         /// <inheritdoc/>
-        protected internal override int Internal_GetRootCount(Scene scene) => GetRootCount(scene.handle);
+        protected internal override int Internal_GetRootCount(Scene scene) => GetRootCount(scene.GetSceneIntHandle());
 
         /// <summary>
         /// Gets the <see cref="Scene.rootCount"/> for the provided scene handle.
         /// </summary>
         protected internal static int GetRootCount(int sceneHandle)
         {
+            // TODO: Unity 6 support
             return ICallManager.GetICall<d_GetRootCountInternal>("UnityEngine.SceneManagement.Scene::GetRootCountInternal")
                    .Invoke(sceneHandle);
         }
